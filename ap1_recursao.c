@@ -1,8 +1,7 @@
-/*
-AUTOR: GUSTAVO HENRIQUE TAVARES ISOBE
-RA: 158552 DATA: 22/03/2023
+/* Programa: AP1 - Recursão
+   Autor: Gustavo Henrique Tavares Isobe
+   Versao: 1.0 - 22/03/2023 - 22:45h
 */
-
 // ##################### Bibliotecas Externas ##############################
 
 #include <stdio.h>
