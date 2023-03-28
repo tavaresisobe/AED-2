@@ -1,44 +1,55 @@
 /* Programa: AP1 - Recursão
    Autor: Gustavo Henrique Tavares Isobe
-   Versao: 1.0 - 22/03/2023 - 22:45h
+   Versao: 1.0 - 28/03/2023 - 02:23h
 */
 // ##################### Bibliotecas Externas ##############################
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 // ###################### Funcoes e Procedimentos do programa ##############
 
-void start() ;
-int busca() ;
-
 void start()
 {
-  int n, num ;
-  scanf ("%d", &n) ;
-  int *vet, count = 0 ;
-  vet = malloc (n * sizeof(int)) ;
-  for (int i = 0 ; i < n ; i++)
-  {
-      scanf ("%d", &vet[i]) ;
-  }
-  scanf ("%d", &num) ;
-  busca (vet,num,n, &count) ;
-  printf ("Numero de chamadas recursivas: %d\n", count) ;
+    int i, n, num ;
+    scanf ("%d", &n) ;
+    int *vet, *count = 0 ;
+    vet = malloc (n * sizeof(int)) ;
+    for (i = 0 ; i < n ; i++)
+    {
+        scanf ("%d", &vet[i]) ;
+    }
+    scanf ("%d", &num) ;
+    int x = buscabin(vet, &count, 0, n-1, num) ;
+    if (x == 0)
+        printf ("%d nao foi encontrado\n", num) ;
+    else
+        printf ("%d\n", count) ;
+    free(vet) ;
 }
 
-int busca(int *vet, int num, int n, int *count)
+int buscabin(int *vet, int *c, int minimo, int maximo, int num)
 {
-  int i = (n+(n/2))/2 ;
-  return 0 ;
+    if (maximo >= minimo)
+    {
+        int aux = minimo + (maximo - minimo)/2 ;
+        if (vet[aux] == num) 
+            return aux ;
+        if (vet[aux] > num)
+        {
+            *c += 1 ;
+            return buscabin(vet, c, minimo, aux-1, num) ;
+        }else
+            *c += 1 ;
+            return buscabin(vet, c, aux+1, maximo, num) ;
+    }
+    return 0 ;
 }
 
 // ############################ Principal ###################################
 
-int main ()
+int main(void)
 {
-  start() ;
-  return 0 ;
-  
+    start() ;
+    return 0 ;
 }
