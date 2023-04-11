@@ -73,6 +73,90 @@ void listarLista(tipoLDDE *listaAux)
         p = p->prox ;
     }printf ("\n") ;
   }
+   #include <stdio.h>
+#include <stdlib.h>
+ 
+void merge(int arr[], int l, int m, int r, int *count)
+
+{
+    int i, j, k, counta = 0;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    i = 0; 
+    j = 0; 
+    k = l; 
+  
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        //  counta += 1 ;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < n1) {
+      arr[k] = L[i];
+      i++;
+      k++;
+      counta += 1 ;
+    }
+    while (j < n2) {
+      arr[k] = R[j];
+      j++;
+      k++;
+      counta += 1 ;
+    }
+  printf ("%d\n", counta) ;
+}
+
+void mergeSort(int arr[], int l, int r, int *count)
+{
+    if (l < r) {
+      *count +=1 ;
+      int m = l + (r - l) / 2;
+      mergeSort(arr, l, m, count);
+      mergeSort(arr, m + 1, r, count);
+      merge(arr, l, m, r, count);
+    }
+}
+ 
+void printArray(int A[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+        printf("%d ", A[i]);
+    printf("\n");
+}
+
+int main()
+{
+  int arr[] = { 1, 2, 3, 4, 5, 6, 8, 9, 10, 20 };
+  int arr_size = sizeof(arr) / sizeof(arr[0]);
+  printf ("Tamanho da array: %d\n", arr_size) ;
+  int count = 0 ;
+  //printf("Given array is \n");
+  printArray(arr, arr_size);
+  
+  mergeSort(arr, 0, arr_size - 1, &count);
+  printf("\nSorted array is \n");
+  printArray(arr, arr_size);
+  printf ("contador principal: %d\n", count) ;
+  return 0;
+ 
+}
+//1, 2, 3, 4, 5, 6, 8, 9, 10, 20
+//3, 5, 2, 1, 4, 6
 }
 
 // ############################ Principal ###################################
