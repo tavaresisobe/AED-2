@@ -100,5 +100,5 @@ void quick_sort(int vet[], int p, int r, int test)
 int main()
 {
     start() ;
-	return 0; 
+    return 0; 
 }
