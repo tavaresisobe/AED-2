@@ -27,9 +27,9 @@ void start ()
         vet2[i] = vet[i] ;
     }
     int test = 0 ;
-	quick_sort(vet, 0, tam_vet - 1, test);
-	test += 1 ;
-	quick_sort(vet2, 0, tam_vet - 1, test);
+    quick_sort(vet, 0, tam_vet - 1, test);
+   // test += 1 ;
+   // quick_sort(vet2, 0, tam_vet - 1, test);
 	
 	for(i = 0; i < tam_vet; i++) //print para auxiliar
 	    printf("%d ", vet[i]);
@@ -72,8 +72,21 @@ int mediana(int vet[], int p, int r)
     
     return divide(vet, p, r);
 }
- 
+
 void quick_sort(int vet[], int p, int r, int test)
+{
+    if (p < r) 
+    {
+        int pi = divide(vet, p, r);
+        //ordenando :
+        quick_sort(vet, p, pi - 1, test) ; //elementos a esquerda do pivo
+        printf ("1: Executou com o pivo sendo ultimo elemento\n") ;
+        quick_sort(vet, pi + 1, r, test) ; //elementos a direita do pivo
+        printf ("2: Executou com o pivo sendo ultimo elemento\n") ;
+    }
+}
+ 
+/*void quick_sort(int vet[], int p, int r, int test)
 {
     if (p < r) 
     {
@@ -92,10 +105,10 @@ void quick_sort(int vet[], int p, int r, int test)
             //ordenando :
             quick_sort(vet, p, pi - 1, test) ; //elementos a esquerda do pivo
             quick_sort(vet, pi + 1, r, test) ; //elementos a direita do pivo
-            printf ("Executou com o pivo sendo a mediana dos elementos\n") ;
+           // printf ("Executou com o pivo sendo a mediana dos elementos\n") ;
         }
     }
-}
+}*/
 
 int main()
 {
