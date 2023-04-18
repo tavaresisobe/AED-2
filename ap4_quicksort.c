@@ -438,3 +438,75 @@ int main()
 	return 0; 
 }
 */
+
+#include <stdio.h>
+#include <stdlib.h> // srand, rand
+#include <time.h> // time
+
+
+void start ()
+{
+    int tam_vet, i ;
+    int *vet, *vet2 ;
+    
+    scanf ("%d", &tam_vet) ;
+    vet = malloc (tam_vet * sizeof(int)) ;
+    for (i = 0 ; i < tam_vet ; i++)
+    {
+        scanf ("%d", &vet[i]) ;
+    }
+    vet2 = malloc (tam_vet * sizeof(vet)) ;
+    for (i = 0 ; i < tam_vet ; i++) //copiando vetor para implementação do quicksort utiliziando a mediana
+    {
+        vet2[i] = vet[i] ;
+    }    
+	quick_sort(vet, 0, tam_vet - 1);
+	quick_sort(vet2, 0, tam_vet - 1);
+	
+	for(i = 0; i < tam_vet; i++)
+	    printf("%d ", vet[i]);
+	printf ("\n\n") ;
+	for(i = 0; i < tam_vet; i++)
+	    printf("%d ", vet2[i]);
+}
+
+void troca(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int divide (int vet[], int p, int r)
+{
+	int pivo, i, j ;
+	pivo = vet[r]; // o pivô
+	i = p;
+	
+	for(j = p ; j < r ; j++)
+	{
+		if(vet[j] <= pivo)
+		{
+			troca(&vet[j], &vet[i]); //realizando a troca
+			i++;
+		}
+	}
+	troca(&vet[j], &vet[i]);
+	return i ; //retorna o indice do pivô
+}
+
+void quick_sort(int vet[], int p, int r)
+{
+    if (r > p)
+    {
+        int indice = divide(vet, p, r);
+        quick_sort(vet, p, indice - 1);
+        quick_sort(vet, indice + 1, r);
+    }
+}
+
+int main()
+{
+    start() ;
+	return 0; 
+}
