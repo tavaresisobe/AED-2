@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//https://replit.com/@Ramanujaann/AED-2-QuickSort?s=app
 //https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/quick.html
 
 void troca(int *a, int *b)
