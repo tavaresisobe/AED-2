@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+http://freesourcecode.net/cprojects/88173/sourcecode/Q1-ASS3.CPP#.ZEHQhdLMLcs
 //https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/quick.html
 
 void troca(int *a, int *b)
