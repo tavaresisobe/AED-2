@@ -114,3 +114,30 @@ int main()
     start() ;
     return 0; 
 }
+/*
+int partition(int* A,int p, int r){
+  int pivoh = A[r]; //pivo nesse caso eh o ultimo elemento do array;
+  int i = p-1;
+  int temp;
+    for(int j = p; j<=r-1; j++){
+      if(A[j] <= pivoh){
+        i++;
+        swap(&A[j],&A[i]);
+      }
+    }
+  swap(&A[i+1], &A[r]);
+      
+  return i+1;
+}
+
+void quickSort(int* A,int p,int r, int contador, int* min, int* max){
+  if(p<r){
+  int q = partition(A,p,r);
+  quickSort(A,p,q-1,contador+1, min, max);
+  quickSort(A,q+1,r,contador+1, min, max);
+  }  
+  else{
+    if(contador < *min) *min = contador;
+    if(contador > *max) *max = contador;
+  }
+}*/
