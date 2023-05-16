@@ -1,6 +1,6 @@
-/* Programa: lab 5
+/* Programa: 
    Autor: Gustavo Henrique Tavares Isobe -  RA: 158552 
-   Versao: 2.0 - 20/11/2022 - 22:02 h
+   Versao: 2.0 - 15/05/2023 - 22:24 h
 */
 
 //https://wagnergaspar.com/testando-nossa-arvore-binaria-de-busca-balanceada-arvore-avl/
