@@ -243,6 +243,15 @@ void imprimir(No *raiz, int nivel){
         imprimir(raiz->esquerdo, nivel + 1);
     }
 }
+void imprime(No *aux)
+{
+  if (aux!= NULL)
+        printf("%d ", aux->valor);
+    if (aux->direito!= NULL)
+        imprime(aux->direito);
+    if (aux->esquerdo!= NULL)
+        imprime(aux->esquerdo);
+}
 
 int main(){
 
@@ -258,7 +267,8 @@ int main(){
     raiz = inserir(raiz, chave);
   }while(chave != -1);
   imprimir(raiz, 1) ;
-
+  printf("\npula:\n") ;
+  imprime(raiz) ;
 
 /* case 2:
             printf("\tDigite o valor a ser removido: ");
