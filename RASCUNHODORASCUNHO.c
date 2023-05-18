@@ -1,118 +1,71 @@
 /* Programa: AP7 - Arvore AVL
    Autor: Gustavo Henrique Tavares Isobe
-   Versao: 1.0 - 18/05/2023 - 02:05h
+   Versao: 2.0 - 18/05/2023 - 02:53h
 */
 // ##################### Bibliotecas Externas ##############################
 
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+//testes:
 //6 4 3 2 1 -1 4 5 -1 1
 //16 14 20 12 11 19 18 15 17 13 -1 14 19 15 20 -1 18
 
 // ########################## TAD X.h ######################################
 
-struct node
+struct No
 {
-    int data ;
-    struct node* esq ;
-    struct node* dir ;
+    int info ;
+    struct No *esq ;
+    struct No *dir ;
     int ht ;
 };
-struct node* raiz = NULL;
- 
-// function prototyping
-struct node* inicializa(int);
-struct node* insereAVL(struct node*, int);
-struct node* removeNo(struct node*, int);
-struct node* busca(struct node*, int);
-struct node* rotaciona_esq(struct node*);
-struct node* rotaciona_dir(struct node*);
-int fator_balanceamento(struct node*);
-int altura(struct node*);
-void imprimir(struct node*);
-
-// ############################ Principal ###################################
-
-int main()
-{
-    int chave, i ;
-    struct node* result = NULL ;
- 
-    do{
-        scanf("%d", &chave) ;
-        if (chave == -1)
-            break ;
-        raiz = insereAVL(raiz, chave) ;
-    }while (1) ;
-
-    do{
-        scanf("%d", &chave) ;
-        if (chave == -1)
-            break ;
-        result = busca(raiz, chave) ;
-        if (result == NULL)
-        {
-            raiz = insereAVL(raiz, chave) ;
-        }else
-            raiz = removeNo(raiz, chave) ;
-    }while(1) ;
-    scanf ("%d", &i) ;
-    
-    result = busca(raiz, i) ;
-    printf ("%d,%d,%d\n", altura(raiz), altura(raiz->esq), altura(raiz->dir)) ;
-    if (result)
-    {
-        printf ("%d,%d,%d\n", altura(result), altura(result->esq), altura(result->dir)) ;
-        printf ("Valor encontrado\n") ;
-    }else
-        printf ("Valor nao encontrado\n") ;
-    imprimir(raiz) ;
-    return 0 ;
-}
+struct No *raiz = NULL;
 
 // ###################### Funcoes e Procedimentos do programa ##############
  
-struct node* inicializa(int data)
+struct No *inicializa(int chave)
 {
-    struct node* novo = (struct node*) malloc (sizeof(struct node));
+    struct No *novo = (struct No*) malloc (sizeof(struct No));
     if (novo)
     {
-        novo->data = data ;
+        novo->info = chave ;
         novo->esq = NULL ;
         novo->dir = NULL ;
     }else
-        printf("\nERRO ao alocar nó em novoNo!\n") ;
+        printf("\nerro ao alocar memoria\n") ;
     return novo ;
 }
  
-struct node* rotaciona_esq(struct node* raiz)
+struct No *rotaciona_esq(struct No *raiz)
 {
-    struct node* right_child = raiz->dir ;
+    struct No *right_child = raiz->dir ;
     raiz->dir = right_child->esq ;
     right_child->esq = raiz ;
-
+    
+    // atualiza altura do noh
     raiz->ht = altura(raiz);
     right_child->ht = altura(right_child) ;
  
-    // return the new node after rotation
+    // retorna novo noh apos a rotacao
     return right_child ;
 }
 
-struct node* rotaciona_dir(struct node* raiz)
+struct No *rotaciona_dir(struct No *raiz)
 {
-    struct node* left_child = raiz->esq ;
+    struct No *left_child = raiz->esq ;
     raiz->esq = left_child->dir ;
     left_child->dir = raiz ;
  
     // atualiza altura do noh
     raiz->ht = altura(raiz) ;
     left_child->ht = altura(left_child) ;
- 
+    
+    // retorna novo noh apos a rotacao
     return left_child ;
 }
  
-int fator_balanceamento(struct node* raiz)
+int fator_balanceamento(struct No* raiz)
 {
     int lh, rh ;
     if (raiz == NULL)
@@ -128,7 +81,7 @@ int fator_balanceamento(struct node* raiz)
     return lh - rh ;
 }
  
-int altura(struct node* raiz)
+int altura(struct No* raiz)
 {
     int lh, rh ;
     if (raiz == NULL)
@@ -149,8 +102,7 @@ int altura(struct node* raiz)
     return (rh) ;
 }
 
-    //Função para calcular a altura de uma árvore binária
-/*
+/*  //Função para calcular a altura de uma árvore binária
 int height(struct node* raiz){
     if(raiz == NULL){
         return -1;
@@ -166,25 +118,25 @@ int height(struct node* raiz){
 }
 */
  
-struct node* insereAVL(struct node* raiz, int data)
+struct No *insereAVL(struct No *raiz, int chave)
 {
     if (raiz == NULL)
     {
-        struct node* new_node = inicializa(data) ;
-        if (new_node == NULL)
+        struct No *novoNo = inicializa(chave) ;
+        if (novoNo == NULL)
         {
             return NULL ;
         }
-        raiz = new_node ;
+        raiz = novoNo ;
     }
-    else if (data > raiz->data)
+    else if (chave > raiz->info)
     {
-        raiz->dir = insereAVL(raiz->dir, data) ;
- 
-
+        // insere noh na direita
+        raiz->dir = insereAVL(raiz->dir, chave) ;
+        // se AVL estiver desbalanceada, havera rotacao
         if (fator_balanceamento(raiz) == -2)
         {
-            if (data > raiz->dir->data)
+            if (chave > raiz->dir->info)
             {
                 raiz = rotaciona_esq(raiz) ;
             }
@@ -197,13 +149,12 @@ struct node* insereAVL(struct node* raiz, int data)
     }
     else
     {
-        // insert the new node to the left
-        raiz->esq = insereAVL(raiz->esq, data) ;
- 
-        // tree is unbalanced, then rotate it
+        // insere noh na esquerda
+        raiz->esq = insereAVL(raiz->esq, chave) ;
+        // se AVL estiver desbalanceada, havera rotacao
         if (fator_balanceamento(raiz) == 2)
         {
-            if (data < raiz->esq->data)
+            if (chave < raiz->esq->info)
             {
                 raiz = rotaciona_dir(raiz) ;
             }
@@ -214,24 +165,23 @@ struct node* insereAVL(struct node* raiz, int data)
             }
         }
     }
-    //atualiza tam alt do noh
+    //atualiza altura do noh
     raiz->ht = altura(raiz) ;
     return raiz ;
 }
- 
-// deletes a node from the AVL tree
-struct node * removeNo(struct node *raiz, int x)
+
+struct No *removeNo(struct No *raiz, int chave)
 {
-    struct node * temp = NULL ;
+    struct No *temp = NULL ;
  
     if (raiz == NULL)
     {
         return NULL ;
     } 
  
-    if (x > raiz->data)
+    if (chave > raiz->info)
     {
-        raiz->dir = removeNo(raiz->dir, x) ;
+        raiz->dir = removeNo(raiz->dir, chave) ;
         if (fator_balanceamento(raiz) == 2)
         {
             if (fator_balanceamento(raiz->esq) >= 0)
@@ -245,9 +195,9 @@ struct node * removeNo(struct node *raiz, int x)
             }
         }
     }
-    else if (x < raiz->data)
+    else if (chave < raiz->info)
     {
-        raiz->esq = removeNo(raiz->esq, x) ;
+        raiz->esq = removeNo(raiz->esq, chave) ;
         if (fator_balanceamento(raiz) == -2)
         {
             if (fator_balanceamento(raiz->dir) <= 0)
@@ -269,8 +219,8 @@ struct node * removeNo(struct node *raiz, int x)
             while (temp->esq != NULL)
                 temp = temp->esq ;
  
-            raiz->data = temp->data ;
-            raiz->dir = removeNo(raiz->dir, temp->data) ;
+            raiz->info = temp->info ;
+            raiz->dir = removeNo(raiz->dir, temp->info) ;
             if (fator_balanceamento(raiz) == 2)
             {
                 if (fator_balanceamento(raiz->esq) >= 0)
@@ -292,21 +242,20 @@ struct node * removeNo(struct node *raiz, int x)
     raiz->ht = altura(raiz) ;
     return (raiz) ;
 }
- 
-// search a node in the AVL tree
-struct node* busca(struct node* raiz, int chave)
+
+struct No* busca(struct No* raiz, int chave)
 {
-  if (raiz == NULL)
+    if (raiz == NULL)
     {
         return NULL ;
     }
  
-    if(raiz->data == chave)
+    if(raiz->info == chave)
     {
         return raiz ;
     }
  
-    if(chave > raiz->data)
+    if(chave > raiz->info)
     {
         busca(raiz->dir, chave) ;
     }
@@ -316,12 +265,51 @@ struct node* busca(struct node* raiz, int chave)
     } 
 }
  
-void imprimir(struct node* aux) //pos-ordem
+void imprimir(struct No *aux) //pos-ordem
 {
-  if (aux!= NULL)
-        printf("%d ", aux->data) ;
+    if (aux!= NULL)
+        printf("%d ", aux->info) ;
     if (aux->dir != NULL)
         imprimir(aux->dir) ;
     if (aux->esq != NULL)
         imprimir(aux->esq) ;
+}
+
+// ############################ Principal ###################################
+
+int main()
+{
+    int chave, i ;
+    struct No *resultado = NULL ;
+ 
+    do{
+        scanf("%d", &chave) ;
+        if (chave == -1)
+            break ;
+        raiz = insereAVL(raiz, chave) ;
+    }while (1) ;
+
+    do{
+        scanf("%d", &chave) ;
+        if (chave == -1)
+            break ;
+        resultado = busca(raiz, chave) ;
+        if (resultado == NULL)
+        {
+            raiz = insereAVL(raiz, chave) ;
+        }else
+            raiz = removeNo(raiz, chave) ;
+    }while(1) ;
+    scanf ("%d", &i) ;
+    
+    resultado = busca(raiz, i) ;
+    printf ("%d,%d,%d\n", altura(raiz), altura(raiz->esq), altura(raiz->dir)) ;
+    if (resultado)
+    {
+        printf ("%d,%d,%d\n", altura(resultado), altura(resultado->esq), altura(resultado->dir)) ;
+        //printf ("Valor encontrado\n") ;
+    }else
+        printf ("Valor nao encontrado\n") ;
+    imprimir(raiz) ;
+    return 0 ;
 }
