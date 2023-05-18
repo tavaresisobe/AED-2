@@ -1,380 +1,327 @@
-/*
- * AVL Tree Program in C
- */
- 
+/* Programa: AP7 - Arvore AVL
+   Autor: Gustavo Henrique Tavares Isobe
+   Versao: 1.0 - 18/05/2023 - 02:05h
+*/
+// ##################### Bibliotecas Externas ##############################
+
 #include<stdio.h>
 #include<stdlib.h>
- 
-// structure of the tree node
+
+//6 4 3 2 1 -1 4 5 -1 1
+//16 14 20 12 11 19 18 15 17 13 -1 14 19 15 20 -1 18
+
+// ########################## TAD X.h ######################################
+
 struct node
 {
-    int data;
-    struct node* left;
-    struct node* right;
-    int ht;
+    int data ;
+    struct node* esq ;
+    struct node* dir ;
+    int ht ;
 };
- 
-// global initialization of root node
-struct node* root = NULL;
+struct node* raiz = NULL;
  
 // function prototyping
-struct node* create(int);
-struct node* insert(struct node*, int);
-struct node* delete(struct node*, int);
-struct node* search(struct node*, int);
-struct node* rotate_left(struct node*);
-struct node* rotate_right(struct node*);
-int balance_factor(struct node*);
-int height(struct node*);
-void inorder(struct node*);
-void preorder(struct node*);
-void postorder(struct node*);
- 
+struct node* inicializa(int);
+struct node* insereAVL(struct node*, int);
+struct node* removeNo(struct node*, int);
+struct node* busca(struct node*, int);
+struct node* rotaciona_esq(struct node*);
+struct node* rotaciona_dir(struct node*);
+int fator_balanceamento(struct node*);
+int altura(struct node*);
+void imprimir(struct node*);
+
+// ############################ Principal ###################################
+
 int main()
 {
-    int user_choice, data;
-    char user_continue = 'y';
-    struct node* result = NULL;
+    int chave, i ;
+    struct node* result = NULL ;
  
-    while (user_continue == 'y' || user_continue == 'Y')
-    {
-        printf("\n\n------- AVL TREE --------\n");
-        printf("\n1. Insert");
-        printf("\n2. Delete");
-        printf("\n3. Search");
-        printf("\n4. Inorder");
-        printf("\n5. Preorder");
-        printf("\n6. Postorder");
-        printf("\n7. EXIT");
- 
-        printf("\n\nEnter Your Choice: ");
-        scanf("%d", &user_choice);
- 
-        switch(user_choice)
+    do{
+        scanf("%d", &chave) ;
+        if (chave == -1)
+            break ;
+        raiz = insereAVL(raiz, chave) ;
+    }while (1) ;
+
+    do{
+        scanf("%d", &chave) ;
+        if (chave == -1)
+            break ;
+        result = busca(raiz, chave) ;
+        if (result == NULL)
         {
-            case 1:
-                printf("\nEnter data: ");
-                scanf("%d", &data);
-                root = insert(root, data);
-                break;
- 
-            case 2:
-                printf("\nEnter data: ");
-                scanf("%d", &data);
-                root = delete(root, data);
-                break;
- 
-            case 3:
-                printf("\nEnter data: ");
-                scanf("%d", &data);
-                result = search(root, data);
-                if (result == NULL)
-                {
-                    printf("\nNode not found!");
-                }
-                else
-                {
-                    printf("\n Node found");
-                }
-                break;
-            case 4:
-                inorder(root);
-                break;
- 
-            case 5:
-                preorder(root);
-                break;
- 
-            case 6:
-                postorder(root);
-                break;
- 
-            case 7:
-                printf("\n\tProgram Terminated\n");
-                return 1;
- 
-            default:
-                printf("\n\tInvalid Choice\n");
-        }
- 
-        printf("\n\nDo you want to continue? ");
-        scanf(" %c", &user_continue);
-    }
- 
-    return 0;
-}
- 
-// creates a new tree node
-struct node* create(int data)
-{
-    struct node* new_node = (struct node*) malloc (sizeof(struct node));
- 
-    // if a memory error has occurred
-    if (new_node == NULL)
+            raiz = insereAVL(raiz, chave) ;
+        }else
+            raiz = removeNo(raiz, chave) ;
+    }while(1) ;
+    scanf ("%d", &i) ;
+    
+    result = busca(raiz, i) ;
+    printf ("%d,%d,%d\n", altura(raiz), altura(raiz->esq), altura(raiz->dir)) ;
+    if (result)
     {
-        printf("\nMemory can't be allocated\n");
-        return NULL;
-    }
-    new_node->data = data;
-    new_node->left = NULL;
-    new_node->right = NULL;
-    return new_node;
+        printf ("%d,%d,%d\n", altura(result), altura(result->esq), altura(result->dir)) ;
+        printf ("Valor encontrado\n") ;
+    }else
+        printf ("Valor nao encontrado\n") ;
+    imprimir(raiz) ;
+    return 0 ;
+}
+
+// ###################### Funcoes e Procedimentos do programa ##############
+ 
+struct node* inicializa(int data)
+{
+    struct node* novo = (struct node*) malloc (sizeof(struct node));
+    if (novo)
+    {
+        novo->data = data ;
+        novo->esq = NULL ;
+        novo->dir = NULL ;
+    }else
+        printf("\nERRO ao alocar nó em novoNo!\n") ;
+    return novo ;
 }
  
-// rotates to the left
-struct node* rotate_left(struct node* root)
+struct node* rotaciona_esq(struct node* raiz)
 {
-    struct node* right_child = root->right;
-    root->right = right_child->left;
-    right_child->left = root;
- 
-    // update the heights of the nodes
-    root->ht = height(root);
-    right_child->ht = height(right_child);
+    struct node* right_child = raiz->dir ;
+    raiz->dir = right_child->esq ;
+    right_child->esq = raiz ;
+
+    raiz->ht = altura(raiz);
+    right_child->ht = altura(right_child) ;
  
     // return the new node after rotation
-    return right_child;
+    return right_child ;
+}
+
+struct node* rotaciona_dir(struct node* raiz)
+{
+    struct node* left_child = raiz->esq ;
+    raiz->esq = left_child->dir ;
+    left_child->dir = raiz ;
+ 
+    // atualiza altura do noh
+    raiz->ht = altura(raiz) ;
+    left_child->ht = altura(left_child) ;
+ 
+    return left_child ;
 }
  
-// rotates to the right
-struct node* rotate_right(struct node* root)
+int fator_balanceamento(struct node* raiz)
 {
-    struct node* left_child = root->left;
-    root->left = left_child->right;
-    left_child->right = root;
- 
-    // update the heights of the nodes
-    root->ht = height(root);
-    left_child->ht = height(left_child);
- 
-    // return the new node after rotation
-    return left_child;
-}
- 
-// calculates the balance factor of a node
-int balance_factor(struct node* root)
-{
-    int lh, rh;
-    if (root == NULL)
-        return 0;
-    if (root->left == NULL)
-        lh = 0;
+    int lh, rh ;
+    if (raiz == NULL)
+        return 0 ;
+    if (raiz->esq == NULL)
+        lh = 0 ;
     else
-        lh = 1 + root->left->ht;
-    if (root->right == NULL)
-        rh = 0;
+        lh = 1 + raiz->esq->ht ;
+    if (raiz->dir == NULL)
+        rh = 0 ;
     else
-        rh = 1 + root->right->ht;
-    return lh - rh;
+        rh = 1 + raiz->dir->ht ;
+    return lh - rh ;
 }
  
-// calculate the height of the node
-int height(struct node* root)
+int altura(struct node* raiz)
 {
-    int lh, rh;
-    if (root == NULL)
+    int lh, rh ;
+    if (raiz == NULL)
     {
-        return 0;
+        return 0 ;
     }
-    if (root->left == NULL)
-        lh = 0;
+    if (raiz->esq == NULL)
+        lh = 0 ;
     else
-        lh = 1 + root->left->ht;
-    if (root->right == NULL)
-        rh = 0;
+        lh = 1 + raiz->esq->ht ;
+    if (raiz->dir == NULL)
+        rh = 0 ;
     else
-        rh = 1 + root->right->ht;
+        rh = 1 + raiz->dir->ht ;
  
     if (lh > rh)
-        return (lh);
-    return (rh);
+      return (lh) ;
+    return (rh) ;
 }
+
+    //Função para calcular a altura de uma árvore binária
+/*
+int height(struct node* raiz){
+    if(raiz == NULL){
+        return -1;
+    }
+    else{
+        int esq = height(raiz->left);
+        int dir = height(raiz->right);
+        if(esq > dir)
+            return esq + 1;
+        else
+            return dir + 1;
+    }
+}
+*/
  
-// inserts a new node in the AVL tree
-struct node* insert(struct node* root, int data)
+struct node* insereAVL(struct node* raiz, int data)
 {
-    if (root == NULL)
+    if (raiz == NULL)
     {
-        struct node* new_node = create(data);
+        struct node* new_node = inicializa(data) ;
         if (new_node == NULL)
         {
-            return NULL;
+            return NULL ;
         }
-        root = new_node;
+        raiz = new_node ;
     }
-    else if (data > root->data)
+    else if (data > raiz->data)
     {
-        // insert the new node to the right
-        root->right = insert(root->right, data);
+        raiz->dir = insereAVL(raiz->dir, data) ;
  
-        // tree is unbalanced, then rotate it
-        if (balance_factor(root) == -2)
+
+        if (fator_balanceamento(raiz) == -2)
         {
-            if (data > root->right->data)
+            if (data > raiz->dir->data)
             {
-                root = rotate_left(root);
+                raiz = rotaciona_esq(raiz) ;
             }
             else
             {
-                root->right = rotate_right(root->right);
-                root = rotate_left(root);
+                raiz->dir = rotaciona_dir(raiz->dir) ;
+                raiz = rotaciona_esq(raiz) ;
             }
         }
     }
     else
     {
         // insert the new node to the left
-        root->left = insert(root->left, data);
+        raiz->esq = insereAVL(raiz->esq, data) ;
  
         // tree is unbalanced, then rotate it
-        if (balance_factor(root) == 2)
+        if (fator_balanceamento(raiz) == 2)
         {
-            if (data < root->left->data)
+            if (data < raiz->esq->data)
             {
-                root = rotate_right(root);
+                raiz = rotaciona_dir(raiz) ;
             }
             else
             {
-                root->left = rotate_left(root->left);
-                root = rotate_right(root);
+                raiz->esq = rotaciona_esq(raiz->esq) ;
+                raiz = rotaciona_dir(raiz) ;
             }
         }
     }
-    // update the heights of the nodes
-    root->ht = height(root);
-    return root;
+    //atualiza tam alt do noh
+    raiz->ht = altura(raiz) ;
+    return raiz ;
 }
  
 // deletes a node from the AVL tree
-struct node * delete(struct node *root, int x)
+struct node * removeNo(struct node *raiz, int x)
 {
-    struct node * temp = NULL;
+    struct node * temp = NULL ;
  
-    if (root == NULL)
+    if (raiz == NULL)
     {
-        return NULL;
+        return NULL ;
     } 
  
-    if (x > root->data)
+    if (x > raiz->data)
     {
-        root->right = delete(root->right, x);
-        if (balance_factor(root) == 2)
+        raiz->dir = removeNo(raiz->dir, x) ;
+        if (fator_balanceamento(raiz) == 2)
         {
-            if (balance_factor(root->left) >= 0)
+            if (fator_balanceamento(raiz->esq) >= 0)
             {
-                root = rotate_right(root);
+                raiz = rotaciona_dir(raiz) ;
             }
             else
             {
-                root->left = rotate_left(root->left);
-                root = rotate_right(root);
+                raiz->esq = rotaciona_esq(raiz->esq) ;
+                raiz = rotaciona_dir(raiz) ;
             }
         }
     }
-    else if (x < root->data)
+    else if (x < raiz->data)
     {
-        root->left = delete(root->left, x);
-        if (balance_factor(root) == -2)
+        raiz->esq = removeNo(raiz->esq, x) ;
+        if (fator_balanceamento(raiz) == -2)
         {
-            if (balance_factor(root->right) <= 0)
+            if (fator_balanceamento(raiz->dir) <= 0)
             {
-                root = rotate_left(root);
+                raiz = rotaciona_esq(raiz) ; 
             }
             else
             {
-                root->right = rotate_right(root->right);
-                root = rotate_left(root);
+                raiz->dir = rotaciona_dir(raiz->dir) ;
+                raiz = rotaciona_esq(raiz) ;
             }
         }
     }
     else
     {
-        if (root->right != NULL)
+        if (raiz->dir != NULL)
         { 
-            temp = root->right;
-            while (temp->left != NULL)
-                temp = temp->left;
+            temp = raiz->dir ;
+            while (temp->esq != NULL)
+                temp = temp->esq ;
  
-            root->data = temp->data;
-            root->right = delete(root->right, temp->data);
-            if (balance_factor(root) == 2)
+            raiz->data = temp->data ;
+            raiz->dir = removeNo(raiz->dir, temp->data) ;
+            if (fator_balanceamento(raiz) == 2)
             {
-                if (balance_factor(root->left) >= 0)
+                if (fator_balanceamento(raiz->esq) >= 0)
                 {
-                    root = rotate_right(root);
+                    raiz = rotaciona_dir(raiz) ;
                 }
                 else
                 {
-                    root->left = rotate_left(root->left);
-                    root = rotate_right(root);
+                    raiz->esq = rotaciona_esq(raiz->esq) ;
+                    raiz = rotaciona_dir(raiz) ;
                 }
             }
         }
         else
         {
-            return (root->left);
+            return (raiz->esq) ;
         }
     }
-    root->ht = height(root);
-    return (root);
+    raiz->ht = altura(raiz) ;
+    return (raiz) ;
 }
  
 // search a node in the AVL tree
-struct node* search(struct node* root, int key)
+struct node* busca(struct node* raiz, int chave)
 {
-    if (root == NULL)
+  if (raiz == NULL)
     {
-        return NULL;
+        return NULL ;
     }
  
-    if(root->data == key)
+    if(raiz->data == chave)
     {
-        return root;
+        return raiz ;
     }
  
-    if(key > root->data)
+    if(chave > raiz->data)
     {
-        search(root->right, key);
+        busca(raiz->dir, chave) ;
     }
     else
     {
-        search(root->left, key);
+        busca(raiz->esq, chave) ; 
     } 
 }
  
-// inorder traversal of the tree
-void inorder(struct node* root)
-{
-    if (root == NULL)
-    {
-        return;
-    }
- 
-    inorder(root->left);
-    printf("%d ", root->data);
-    inorder(root->right);
-}
- 
-// preorder traversal of the tree
-void preorder(struct node* root)
-{
-    if (root == NULL)
-    {
-        return;
-    }
- 
-    printf("%d ", root->data);
-    preorder(root->left);
-    preorder(root->right);
-}
- 
-// postorder traversal of the tree
-void postorder(struct node* aux)
+void imprimir(struct node* aux) //pos-ordem
 {
   if (aux!= NULL)
-        printf("%d ", aux->data);
-    if (aux->right!= NULL)
-        postorder(aux->right);
-    if (aux->left!= NULL)
-        postorder(aux->left);
+        printf("%d ", aux->data) ;
+    if (aux->dir != NULL)
+        imprimir(aux->dir) ;
+    if (aux->esq != NULL)
+        imprimir(aux->esq) ;
 }
