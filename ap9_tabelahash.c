@@ -51,6 +51,8 @@ void start()
     }
     //int x = remover(hash, m, 2) ; //basta descomentar para testar a funcao
     imprimir(hash, m, chave) ;
+   
+    free(hash) ;
     return 0 ;
 }
 
