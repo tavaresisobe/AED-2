@@ -303,3 +303,35 @@ int main() {
     return 0;
 }
 ```
+
+Olá, este é o Bing. Eu posso tentar escrever uma função para imprimir o número de elementos na página raiz e seus elementos da B-tree. Veja o código abaixo:
+
+```c
+
+// Uma função para imprimir o número de elementos na página raiz e seus elementos da B-tree
+
+void printRoot(struct BTreeNode* root) {
+
+    if (root == NULL) { // Se a árvore está vazia
+
+        printf("A árvore está vazia.\n");
+
+    } else { // Se a árvore não está vazia
+
+        printf("O número de elementos na página raiz é %d.\n", root->n); // Imprime o número de chaves na raiz
+
+        printf("Os elementos na página raiz são: ");
+
+        for (int i = 0; i < root->n; i++) { // Percorre as chaves da raiz
+
+            printf("%d ", root->keys[i]); // Imprime cada chave
+
+        }
+
+        printf("\n");
+
+    }
+
+}
+
+```
