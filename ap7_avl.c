@@ -3,8 +3,6 @@
    Versao: 3.0 - 18/05/2023 - 22:51h
 */
 
-//https://replit.com/@Ramanujaann/AED-2-QuickSort?s=app
- 
 // ##################### Bibliotecas Externas ##############################
  
 #include <stdio.h>
