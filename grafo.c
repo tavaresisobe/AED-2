@@ -146,6 +146,13 @@ void DFSUtil(Graph* g, int s, int* visited, int* first) {
     }
 }
 
+// Exibe a sequência da Busca em Profundidade (DFS) de um grafo g a partir de um nó/vértice inicial s
+void DFS(Graph* g, int s) {
+    int* visited = (int*) malloc(g->V * sizeof(int)); // Cria um vetor para marcar os nós/vértices visitados
+    int first = 1; // Cria uma variável para indicar se é a primeira chamada da função DFSUtil ou não
+    DFSUtil(g, s, visited, &first); // Chama a função DFSUtil com os parâmetros corretos
+    free(visited); // Libera a memória alocada para o vetor de visitados
+}
 
 
 
