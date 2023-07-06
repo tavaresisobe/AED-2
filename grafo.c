@@ -154,10 +154,6 @@ void DFS(Graph* g, int s) {
     free(visited); // Libera a memória alocada para o vetor de visitados
 }
 
-
-
-
-
 // Define as estruturas, variáveis globais, constantes e funções auxiliares aqui
 
 int main() {
