@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+//http://www.univasf.edu.br/~marcelo.linder/arquivos_aed2/aulas/aula25.pdf
 
 // Define uma estrutura para representar um nó da lista de adjacência
 typedef struct node {
