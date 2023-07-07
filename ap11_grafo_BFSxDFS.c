@@ -1,6 +1,7 @@
 /* Programa: AP 11 - Grafo - BFS x DFS
    Autor: Gustavo Henrique Tavares Isobe -  RA: 158552 
-   Versao: 1.0 - 06/07/2023 - 22:07 h
+   Versao: 1.0 - 06/07/2023 - 23:57 h
+   Nota: 10/10
 */
 //https://github.com/tavaresisobe/AED-I/blob/main/lab05.c
 //https://github.com/tavaresisobe/AED-I/blob/main/lab06.c
