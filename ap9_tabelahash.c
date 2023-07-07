@@ -53,7 +53,6 @@ void start()
     imprimir(hash, m, chave) ;
    
     free(hash) ;
-    return 0 ;
 }
 
 void inicializarTabela(int hash[], int m)
