@@ -2,6 +2,9 @@
    Autor: Gustavo Henrique Tavares Isobe -  RA: 158552 
    Versao: 1.0 - 06/07/2023 - 22:07 h
 */
+//https://github.com/tavaresisobe/AED-I/blob/main/lab05.c
+//https://github.com/tavaresisobe/AED-I/blob/main/lab06.c
+//https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/graphdatastructs.html
 
 // ##################### Bibliotecas Externas ##############################
 
