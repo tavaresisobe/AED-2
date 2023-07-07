@@ -1,8 +1,9 @@
 /* Programa: AP 11 - Grafo - BFS x DFS
    Autor: Gustavo Henrique Tavares Isobe -  RA: 158552 
-   Versao: 1.0 - 06/07/2023 - 23:57 h
+   Versao: 1.0 - 07/07/2023 - 20:10 h
    Nota: 10/10
 */
+
 //https://github.com/tavaresisobe/AED-I/blob/main/lab05.c
 //https://github.com/tavaresisobe/AED-I/blob/main/lab06.c
 //https://www.ime.usp.br/~pf/algoritmos_para_grafos/aulas/graphdatastructs.html
@@ -70,7 +71,7 @@ void adicionaAresta(tipoGrafo *grafo, int u, int v)
 }
 
 // busca em largura
-void BFSUtil(tipoGrafo *grafo, int s, int *visitado)
+void BFS(tipoGrafo *grafo, int s, int *visitado)
 {
     //fila:
     int fila[MAX] ;
@@ -98,19 +99,8 @@ void BFSUtil(tipoGrafo *grafo, int s, int *visitado)
     }
 }
 
-// busca em largura auxiliar
-void BFS(tipoGrafo *grafo, int s) 
-{
-    int visitado[MAX] ;
-    for (int i = 0; i < grafo->V; i++) 
-    { 
-        visitado[i] = 0 ; //inicializa vetor com zeros
-    }
-    BFSUtil(grafo, s, visitado) ;
-}
-
 // busca em profundidade
-void DFSUtil(tipoGrafo *grafo, int s, int *visitado) 
+void DFS(tipoGrafo *grafo, int s, int *visitado) 
 {
     printf("%d ", s) ; //imprimindo o no visitado
     visitado[s] = 1 ; //colore no visitado
@@ -120,21 +110,21 @@ void DFSUtil(tipoGrafo *grafo, int s, int *visitado)
         int v = temp->chave ;
         if (visitado[v] == 0)
         {
-            DFSUtil(grafo, v, visitado) ;
+            DFS(grafo, v, visitado) ;
         }
         temp = temp->prox ;
     }
 }
 
-// busca em profundidade auxiliar
-void DFS(tipoGrafo *grafo, int s) 
+void chamaBusca(tipoGrafo *grafo, int s, int x) 
 {
     int visitado[MAX] ;
     for (int i = 0; i < grafo->V; i++) 
     {
         visitado[i] = 0 ; //inicializa vetor com zeros
     }
-    DFSUtil(grafo, s, visitado) ;
+    if (x == 0) BFS(grafo, s, visitado) ;
+    else DFS(grafo, s, visitado) ;
 }
 
 /*void imprimeLista(No *aux)
@@ -177,12 +167,12 @@ int main()
             scanf("%d %d", &u, &v) ;
             adicionaAresta(&grafo, u, v) ; // adiciona aresta direcionada de u para v
         }
-        BFS(&grafo, busca) ;
+        chamaBusca(&grafo, busca, 0) ;
         printf("\n") ;
 
-        DFS(&grafo, busca) ;
+        chamaBusca(&grafo, busca, 1) ;
         printf("\n") ;
     }else
-        printf("") ;
+        printf("Os valores de entrada nao condizem com o enunciado\n") ;
     return 0 ;
 }
