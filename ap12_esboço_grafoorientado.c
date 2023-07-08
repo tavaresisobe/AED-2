@@ -52,3 +52,107 @@ exemplo de input:
 2 5 1
 output:
 -5 -2 -7 2 -4 -6 3 0
+
+    #include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+typedef struct {
+    int src;
+    int dest;
+    int weight;
+} Edge;
+
+typedef struct {
+    int numNodes;
+    int numEdges;
+    Edge* edges;
+} Graph;
+
+Graph createGraph(int numNodes, int numEdges) {
+    Graph graph;
+    graph.numNodes = numNodes;
+    graph.numEdges = numEdges;
+    graph.edges = malloc(numEdges * sizeof(Edge));
+    return graph;
+}
+
+void addEdge(Graph* graph, int src, int dest, int weight) {
+    // Adiciona uma aresta ao grafo
+    Edge edge;
+    edge.src = src;
+    edge.dest = dest;
+    edge.weight = weight;
+    graph->edges[src] = edge;
+}
+
+void bellmanFord(Graph graph, int src, int restriction) {
+    int* dist = malloc(graph.numNodes * sizeof(int));
+    
+    // Inicializa as distâncias como infinito
+    for (int i = 0; i < graph.numNodes; i++) {
+        dist[i] = INT_MAX;
+    }
+    
+    // A distância do nó inicial para ele mesmo é sempre 0
+    dist[src] = 0;
+    
+    // Relaxa as arestas repetidamente para encontrar o caminho mínimo
+    for (int count = 0; count < graph.numNodes - 1; count++) {
+        for (int i = 0; i < graph.numEdges; i++) {
+            int u = graph.edges[i].src;
+            int v = graph.edges[i].dest;
+            int weight = graph.edges[i].weight;
+            
+            if (dist[u] != INT_MAX && dist[u] + weight <= dist[v] && weight >= restriction) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+    
+    // Verifica se há ciclos de peso negativo
+    for (int i = 0; i < graph.numEdges; i++) {
+        int u = graph.edges[i].src;
+        int v = graph.edges[i].dest;
+        int weight = graph.edges[i].weight;
+        
+        if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+            printf("Há ciclo de peso negativo no grafo!\n");
+            free(dist);
+            return;
+        }
+    }
+    
+    // Imprime as distâncias mínimas encontradas
+    for (int i = 0; i < graph.numNodes; i++) {
+        printf("Distância mínima de %d a %d: %d\n", src, i, dist[i]);
+    }
+    
+    free(dist);
+}
+
+int main() {
+    int V, R, N, M;
+    printf("Digite o nó inicial: ");
+    scanf("%d", &V);
+    printf("Digite a restrição: ");
+    scanf("%d", &R);
+    printf("Digite o número total de nós: ");
+    scanf("%d", &N);
+    printf("Digite o número de arestas: ");
+    scanf("%d", &M);
+    
+    Graph graph = createGraph(N, M);
+    
+    for (int i = 0; i < M; i++) {
+        int src, dest, weight;
+        printf("Digite os nós e o peso da aresta %d: ", i + 1);
+        scanf("%d %d %d", &src, &dest, &weight);
+        
+        addEdge(&graph, src, dest, weight);
+    }
+    
+    bellmanFord(graph, V, R);
+    
+    return 0;
+    }
