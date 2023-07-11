@@ -1,5 +1,5 @@
 /* Programa: AP9 - Tabela Hash
-   Autor: Gustavo Henrique Tavares Isobe - RA: 158552
+   Autor: Gustavo Henrique Tavares Isobe
    Versao: 2.0 - 02/06/2023 - 19:34h
 */
  
