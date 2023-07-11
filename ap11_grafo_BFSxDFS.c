@@ -1,5 +1,5 @@
 /* Programa: AP 11 - Grafo - BFS x DFS
-   Autor: Gustavo Henrique Tavares Isobe -  RA: 158552 
+   Autor: Gustavo Henrique Tavares Isobe
    Versao: 1.0 - 07/07/2023 - 20:10 h
    Nota: 10/10
 */
